@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Parking Management System - Dashboard</title>
+</head>
+<body>
+    <div id="dashboard-container">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>Email: {{ user.email }}</p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message {{ message.split(' ')[0] }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <p>This is your dashboard. Add your parking spaces or any other content here.</p>
+        
+        <!-- Display reservations -->
+        {% if reservations %}
+            <h2>Your Reservations:</h2>
+            <ul>
+                {% for reservation in reservations %}
+                    <li>{{ reservation.space_number }} - {{ reservation.start_time }} to {{ reservation.end_time }} (Price: ${{ 5 * (int(reservation.end_time) - int(reservation.start_time)) }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No reservations yet.</p>
+        {% endif %}
+        
+        <!-- Reservation form -->
+        <h2>Reserve a Parking Space:</h2>
+        <form action="{{ url_for('reserve') }}" method="post">
+            <label for="space_number">Space Number:</label>
+            <input type="text" id="space_number" name="space_number" required>
+
+            <label for="start_time">Start Time:</label>
+            <input type="text" id="start_time" name="start_time" placeholder="HH" required>
+
+            <label for="end_time">End Time:</label>
+            <input type="text" id="end_time" name="end_time" placeholder="HH" required>
+
+            <button type="submit">Reserve</button>
+        </form>
+
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>

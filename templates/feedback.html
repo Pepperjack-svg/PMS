@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add this link in the head section of feedback.html -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_feedback.css') }}">
+
+    
+    <title>Parking Management System - Feedback</title>
+</head>
+<body>
+    <div id="feedback-container">
+        <h1>Feedback</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message {{ message.split(' ')[0] }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('feedback') }}" method="post">
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="4" required></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+        <p>Go back to <a href="{{ url_for('index') }}">Home</a></p>
+    </div>
+</body>
+</html>
